@@ -15,17 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/who', function () {
-    return "This is my first Laravel";
-});
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Auth::routes();
+Route::resource('companies','CompaniesController');
+Route::resource('projects','ProjectsController');
+Route::resource('roles','RolesController');
+Route::resource('task','TasksController');
+Route::resource('users','UsersController');
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
