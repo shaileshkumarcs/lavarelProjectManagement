@@ -59,7 +59,9 @@
                 </div>
             </div>
         </nav>
-        <div class="container">
+        <div class="container" style="margin-top: 20px;">
+            @include('partials.errors')
+            @include('partials.success')
             <div class="row">
                 @yield('content')
             </div>
