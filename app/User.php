@@ -46,6 +46,7 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Task');
     }
 
+    // Many to Many relationship
     public function projects(){
         return $this->belongsToMany('App\Project');
     }

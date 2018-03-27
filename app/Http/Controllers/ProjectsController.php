@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Project;
+use App\Company;
+use App\ProjectUser;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,6 +28,31 @@ class ProjectsController extends Controller
         return view('auth.login');
     }
 
+    public function adduser(Request $request){
+
+        // add the projects
+
+        // take a project , add a user to it
+        $project = Project::find($request->input('project_id'));
+
+        if(Auth::user()->id == $project->user_id){
+            $user = User::where('email', $request->input('email'))->first();
+
+            $projectUser = ProjectUser::where('user_id', $user->id)
+                                        ->where('project_id',$project->id)->first();
+            if($projectUser){
+                // user already exists, exit 
+                return redirect()->route('projects.show',['Project' => $project->id])->with('success',$request->input('email').' is already a member of this project.');
+            }
+            if($user && $project){
+                $project->users()->attach($user->id);
+
+                return redirect()->route('projects.show',['Project' => $project->id])->with('success',$request->input('email').' was added to the project successfully');
+            }
+        }
+        return redirect()->route('projects.show',['Project' => $project->id])->with('error',' Error adding user to project.');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -33,8 +61,11 @@ class ProjectsController extends Controller
     public function create($company_id = null )
     {
         //
-        
-        return view('projects.create',['company_id'=>$company_id]);
+        $company_id = null;
+        if(!$company_id){
+            $companies = Company::where('user_id', Auth::user()->id)->get();
+        }
+        return view('projects.create',['company_id'=>$company_id,'companies'=>$companies] );
     }
 
     /**
@@ -50,7 +81,7 @@ class ProjectsController extends Controller
             $project = Project::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
-                'company_id' => $require->input('company_id'),
+                'company_id' => $request->input('company_id'),
                 'user_id' => Auth::user()->id
             ]);
 
@@ -77,7 +108,8 @@ class ProjectsController extends Controller
         //$project = Project::where('id',$project->id)->first();
         $project = Project::find($project->id);
 
-        return view('projects.show',['project'=>$project]);
+        $comments = $project->comments;
+        return view('projects.show',['project'=>$project, 'comments' => $comments]);
     }
 
     /**

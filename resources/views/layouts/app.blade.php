@@ -12,6 +12,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
 </head>
 <body>
     <div id="app">
@@ -37,12 +39,30 @@
                             <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                             <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                         @else
-                            <li><a class="nav-link" href="{{ route('companies.index') }}">My Companies</a></li>
-                            <li><a class="nav-link" href="{{ route('projects.index') }}">Projects</a></li>
-                            <li><a class="nav-link" href="{{ route('tasks.index') }}">Tasks</a></li>
+                            <li><a class="nav-link" href="{{ route('companies.index') }}"><i class="fas fa-building"></i> Companies</a></li>
+                            <li><a class="nav-link" href="{{ route('projects.index') }}"><i class="fas fa-briefcase"></i> Projects</a></li>
+                            <li><a class="nav-link" href="{{ route('tasks.index') }}"><i class="fas fa-tasks"></i> Tasks</a></li>
+
+                            @if(Auth::user()->role_id == 1)
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre><i class="fas fa-user"></i> 
+                                    Admin <span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ route('companies.index') }}"><i class="fas fa-building"></i> All Companies</a>
+                                    <a class="dropdown-item" href="{{ route('projects.index') }}"><i class="fas fa-briefcase"></i> All Projects</a>
+                                    <a class="dropdown-item" href="{{ route('tasks.index') }}"><i class="fas fa-tasks"></i> All Tasks</a>
+                                    <a class="dropdown-item" href="{{ route('users.index') }}"><i class="fas fa-users"></i> All Users</a>
+                                    <a class="dropdown-item" href="{{ route('roles.index') }}"><i class="fas fa-envelope"></i> All Role</a>
+                                </div>
+
+                            </li>
+                            @endif
+
 
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre><i class="fas fa-user"></i> 
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
@@ -50,7 +70,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        <i class="fas fa-sign-out-alt"></i>  {{ __('Logout') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -73,5 +93,6 @@
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    
 </body>
 </html>
